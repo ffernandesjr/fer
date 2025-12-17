@@ -118,7 +118,7 @@
             display: block;
         }
         
-        .video-container > div {
+        #videoWrapper {
             width: 100%;
             max-width: 360px;
             margin: 0 auto;
@@ -542,14 +542,16 @@
                     <h2>💕</h2>
                 </div>
                 <button class="video-close" onclick="closeVideo()">✕</button>
-                <div style="position: relative; padding-bottom: 177.78%; height: 0; overflow: hidden; max-width: 100%; background: #000;">
-                    <iframe id="videoPlayer" 
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
-                            src="https://www.youtube.com/embed/LgAycSTL4Pk?autoplay=1&rel=0" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                    </iframe>
+                <div id="videoWrapper" style="position: relative; width: 100%; max-width: 360px; margin: 0 auto; background: #000;">
+                    <div style="position: relative; padding-bottom: 177.78%; height: 0; overflow: hidden;">
+                        <iframe id="videoPlayer" 
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                                src="" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
                 </div>
                 <button class="next-button" id="nextButton" onclick="goToStage(2)">Continuar ➜</button>
             </div>
@@ -680,17 +682,28 @@
 
         // ===== FUNÇÕES DE VÍDEO =====
         function closeVideo() {
-            document.getElementById('videoModal').classList.remove('active');
-            // Para YouTube iframe, precisamos recarregar para parar o vídeo
-            const iframe = document.getElementById('videoPlayer');
-            iframe.src = iframe.src; // Recarrega o iframe para parar o vídeo
+            const videoModal = document.getElementById('videoModal');
+            const videoPlayer = document.getElementById('videoPlayer');
+            
+            videoModal.classList.remove('active');
+            // Parar o vídeo removendo o src do iframe
+            videoPlayer.src = '';
             document.body.style.overflow = 'auto';
         }
 
         // Mostrar botão "Continuar" após abrir o vídeo (YouTube Shorts geralmente são curtos)
         function openVideo() {
-            document.getElementById('videoModal').classList.add('active');
+            const videoModal = document.getElementById('videoModal');
+            const videoPlayer = document.getElementById('videoPlayer');
+            
+            // Carregar o vídeo do YouTube apenas quando o modal abrir
+            if (!videoPlayer.src) {
+                videoPlayer.src = 'https://www.youtube.com/embed/LgAycSTL4Pk?autoplay=1&rel=0&playsinline=1';
+            }
+            
+            videoModal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            
             // Mostrar botão "Continuar" após alguns segundos
             setTimeout(() => {
                 document.getElementById('nextButton').classList.add('show');
