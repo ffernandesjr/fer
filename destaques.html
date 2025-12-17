@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Você 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        /* Seções */
+        .section {
+            display: none;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ===== ETAPA 1: PRESENTE/VÍDEO ===== */
+        .stage-one {
+            text-align: center;
+            color: white;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .stage-one h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stage-one p {
+            font-size: 1.2em;
+            margin-bottom: 50px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .gift-box {
+            font-size: 150px;
+            margin: 30px 0;
+            cursor: pointer;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .gift-box:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+        }
+
+        .gift-text {
+            font-size: 1.1em;
+            margin-top: 30px;
+            font-weight: 300;
+        }
+
+        /* Modal de Vídeo */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .video-container {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            background: black;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .video-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .video-header h2 {
+            font-size: 1.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .video-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 101;
+            transition: background 0.3s ease;
+        }
+
+        .video-close:hover {
+            background: #f0f0f0;
+        }
+
+        .next-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s ease;
+            z-index: 101;
+            display: none;
+        }
+
+        .next-button:hover {
+            background: #764ba2;
+        }
+
+        .next-button.show {
+            display: block;
+        }
+
+        /* ===== ETAPA 2: PAPIRO COM DECLARAÇÃO ===== */
+        .stage-two {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .stage-two.active {
+            display: flex;
+        }
+
+        .papiro {
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
+            border: 3px solid #8b7355;
+            border-radius: 10px;
+            padding: 60px 40px;
+            max-width: 700px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.5);
+            position: relative;
+            transform: perspective(1000px) rotateY(-2deg);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .papiro:before,
+        .papiro:after {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border: 2px solid rgba(139, 115, 85, 0.1);
+            top: 10%;
+            left: 10%;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        }
+
+        .papiro:before {
+            border-color: rgba(139, 115, 85, 0.05);
+            width: 90%;
+            height: 90%;
+            top: 5%;
+            left: 5%;
+        }
+
+        .papiro-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #5a4a3a;
+        }
+
+        .papiro-content h2 {
+            font-size: 2em;
+            margin-bottom: 30px;
+            font-family: 'Georgia', serif;
+            color: #764ba2;
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+        }
+
+        .papiro-content p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+        }
+
+        .assinatura {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #8b7355;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.5em;
+            color: #764ba2;
+        }
+
+        .view-moments-btn {
+            display: inline-block;
+            margin-top: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .view-moments-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        /* ===== ETAPA 3: GALERIA DE FOTOS ===== */
+        .stage-three {
+            text-align: center;
+            color: white;
+        }
+
+        .stage-three h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .coracoes {
+            font-size: 1.5em;
+            margin: 15px 0;
+            letter-spacing: 5px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .stage-three p {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .gallery-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .gallery-title {
+            text-align: center;
+            color: #764ba2;
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            aspect-ratio: 1;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover:after {
+            opacity: 1;
+        }
+
+        /* Modal para fotos ampliadas */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            animation: zoomIn 0.3s ease;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+        }
+
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.3);
+            border: none;
+            color: white;
+            font-size: 30px;
+            padding: 15px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .modal-nav:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .modal-prev {
+            left: 20px;
+        }
+
+        .modal-next {
+            right: 20px;
+        }
+
+        .footer-message {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            font-size: 1.1em;
+            font-weight: 300;
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        .footer-message p {
+            line-height: 1.8;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+        }
+
+        /* Animações */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .stage-one h1 {
+                font-size: 1.8em;
+            }
+
+            .gift-box {
+                font-size: 100px;
+            }
+
+            .papiro {
+                padding: 40px 25px;
+            }
+
+            .papiro-content h2 {
+                font-size: 1.5em;
+            }
+
+            .papiro-content p {
+                font-size: 1em;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .gallery-section {
+                padding: 25px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ===== ETAPA 1: PRESENTE COM VÍDEO ===== -->
+        <div class="section stage-one active" id="section1">
+            <h1>Oi Fer 💕</h1>
+            <p>Tenho algo especial para mostrar...</p>
+            <div class="gift-box" onclick="openVideo()">🎁</div>
+            <p class="gift-text">Clica aí pra você descobrir ⬆️ ✨</p>
+        </div>
+
+        <!-- Modal de Vídeo -->
+        <div class="video-modal" id="videoModal">
+            <div class="video-container">
+                <div class="video-header">
+                    <h2>💕</h2>
+                </div>
+                <button class="video-close" onclick="closeVideo()">✕</button>
+                <video id="videoPlayer" width="100%" height="auto" controls>
+                    <source src="assets/videos/fer_video.MOV" type="video/quicktime">
+                    <source src="assets/videos/fer_video.MOV" type="video/mp4">
+                    Seu navegador não suporta vídeos HTML5.
+                </video>
+                <button class="next-button" id="nextButton" onclick="goToStage(2)">Continuar ➜</button>
+            </div>
+        </div>
+
+        <!-- ===== ETAPA 2: PAPIRO COM DECLARAÇÃO ===== -->
+        <div class="section stage-two" id="section2">
+            <div class="papiro">
+                <div class="papiro-content">
+                    <h2>A Guerreira que você É ❤️</h2>
+
+                    <p>
+                        Mesmo não sendo seu aniversário, hoje também é um bom dia para celebrar a mulher extraordinária que você tem se tornado.
+                        Afinal, não precisamos de datas especiais para reconhecer quem é especial para nós.
+                        <br>
+                         Sua vida reflete com beleza o que a Palavra nos ensina:
+                        <em>
+                        "...a tribulação produz perseverança; a perseverança, um caráter aprovado; e o caráter aprovado, esperança."
+                        </em>
+                        <br>
+                        Romanos 5:3-4.
+                    </p>
+
+                    <p>
+                        Admiro imensamente a forma como você enfrenta cada desafio, não como um ponto final, mas como uma oportunidade de crescimento em Deus. Sua força e sua fé são um testemunho poderoso.
+                    </p>
+
+                    <p>
+                        Lembre-se sempre do que está escrito:
+                        <em>
+                        "Feliz é o homem que persevera na provação, porque depois de aprovado receberá a coroa da vida."
+                        </em>
+                        <br>
+                        - Tiago 1:12.
+                        <br>
+                        Você é uma inspiração.
+                    </p>
+
+                    <div class="assinatura">
+                        Com todo carinho e respeito
+                    </div>
+
+                    <button class="view-moments-btn" onclick="goToStage(3)">
+                        Um pouquinho de você e da sua família em Cristo ✨
+                    </button>
+                </div> <!-- Fechamento do papiro-content -->
+            </div> <!-- Fechamento do papiro -->
+        </div> <!-- Fechamento da section2 (AQUI ESTAVA O ERRO PRINCIPAL) -->
+
+
+        <!-- ===== ETAPA 3: GALERIA DE FOTOS ===== -->
+        <div class="section stage-three" id="section3">
+            <h1>A Beleza que Floresce da Fé 💕</h1>
+            <div class="coracoes">
+                ✨💖✨
+            </div>
+            <p>
+                Estas fotos são um lembrete para nunca nos cansarmos de fazer o bem, pois no tempo certo colheremos, se não desistirmos (Gálatas 6:9).
+                <br>
+                Cada imagem captura a luz de alguém que perseverou e floresceu.
+            </p>
+
+            <div class="gallery-section">
+                <h2 class="gallery-title">Momentos que guardam sua Essência 📸</h2>
+                <div class="gallery" id="gallery">
+                    <!-- Certifique-se que o caminho das imagens está correto -->
+                    <div class="gallery-item" onclick="openModal(0)">
+                        <img src="assets/images/fer.jpeg" alt="Foto 1">
+                    </div>
+                    <div class="gallery-item" onclick="openModal(1)">
+                        <img src="assets/images/fer_church_moment.jpeg" alt="Foto 2">
+                    </div>
+                    <div class="gallery-item" onclick="openModal(2)">
+                        <img src="assets/images/fer_just.jpeg" alt="Foto 3">
+                    </div>
+                    <div class="gallery-item" onclick="openModal(3)">
+                        <img src="assets/images/fer_louvor.jpeg" alt="Foto 4">
+                    </div>
+                    <div class="gallery-item" onclick="openModal(4)">
+                        <img src="assets/images/fer_moment.jpeg" alt="Foto 5">
+                    </div>
+                    <div class="gallery-item" onclick="openModal(5)">
+                        <img src="assets/images/fer_spink.jpeg" alt="Foto 6">
+                    </div>
+                    <div class="gallery-item" onclick="openModal(3)">
+                        <img src="assets/images/fer_fam.jpg" alt="Foto 7">
+                    </div>
+                    <div class="gallery-item" onclick="openModal(1)">
+                        <img src="assets/images/fer_church_moment.jpeg" alt="Foto 8">
+                    </div>
+                    <div class="gallery-item" onclick="openModal(2)">
+                        <img src="assets/images/fer_fam.jpeg" alt="Foto 9">
+                    </div>
+                    <div class="gallery-item" onclick="openModal(1)">
+                        <img src="assets/images/fer_du.jpg" alt="Foto 10">
+                    </div>
+            </div>
+
+            <div class="footer-message">
+                <p>Obrigado por ser você. 💕</p>
+                <p>Com todo meu amor,</p>
+                <p style="font-size: 1.3em; margin-top: 20px;">❤️</p>
+            </div>
+        </div> <!-- Fechamento section3 -->
+    </div> <!-- Fechamento container -->
+
+    <!-- Modal para fotos ampliadas -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <button class="modal-nav modal-prev" onclick="prevImage()">❮</button>
+            <img id="modalImage" src="" alt="Foto ampliada">
+            <button class="modal-nav modal-next" onclick="nextImage()">❯</button>
+        </div>
+    </div>
+
+    <script>
+        const images = [
+            'assets/images/fer.jpeg',
+            'assets/images/fer_church_moment.jpeg',
+            'assets/images/fer_just.jpeg',
+            'assets/images/fer_louvor.jpeg',
+            'assets/images/fer_moment.jpeg',
+            'assets/images/fer_spink.jpeg'
+        ];
+
+        let currentImageIndex = 0;
+
+        // ===== FUNÇÕES DE VÍDEO =====
+        function openVideo() {
+            document.getElementById('videoModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideo() {
+            document.getElementById('videoModal').classList.remove('active');
+            const video = document.getElementById('videoPlayer');
+            video.pause();
+            video.currentTime = 0;
+            document.body.style.overflow = 'auto';
+        }
+
+        // Mostrar botão "Continuar" quando vídeo terminar
+        const videoPlayer = document.getElementById('videoPlayer');
+        videoPlayer.addEventListener('ended', function() {
+            document.getElementById('nextButton').classList.add('show');
+            // Pequeno delay para garantir que a classe foi aplicada
+            setTimeout(() => {
+                document.getElementById('nextButton').style.animation = 'slideUp 0.5s ease-out';
+            }, 100);
+        });
+
+        // ===== FUNÇÕES DE NAVEGAÇÃO ENTRE ETAPAS =====
+        function goToStage(stage) {
+            // Ocultar todas as seções
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Mostrar seção específica
+            document.getElementById('section' + stage).classList.add('active');
+
+            // Fechar modais
+            closeVideo();
+            closeModal();
+
+            // Scroll para o topo
+            window.scrollTo(0, 0);
+        }
+
+        // ===== FUNÇÕES DE GALERIA DE FOTOS =====
+        function openModal(index) {
+            currentImageIndex = index;
+            document.getElementById('modal').classList.add('active');
+            updateModalImage();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateModalImage() {
+            document.getElementById('modalImage').src = images[currentImageIndex];
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            updateModalImage();
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            updateModalImage();
+        }
+
+        // Fechar modal ao clicar fora
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Navegar com setas do teclado
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('modal').classList.contains('active')) {
+                if (e.key === 'ArrowRight') nextImage();
+                if (e.key === 'ArrowLeft') prevImage();
+                if (e.key === 'Escape') closeModal();
+            }
+            if (document.getElementById('videoModal').classList.contains('active')) {
+                if (e.key === 'Escape') closeVideo();
+            }
+        });
+    </script>
+</body>
+</html>
