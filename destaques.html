@@ -112,16 +112,10 @@
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
         }
 
-        .video-container iframe {
+        .video-container video {
             width: 100%;
-            height: 100%;
+            height: auto;
             display: block;
-        }
-        
-        #videoWrapper {
-            width: 100%;
-            max-width: 360px;
-            margin: 0 auto;
         }
 
         .video-header {
@@ -542,17 +536,11 @@
                     <h2>💕</h2>
                 </div>
                 <button class="video-close" onclick="closeVideo()">✕</button>
-                <div id="videoWrapper" style="position: relative; width: 100%; max-width: 360px; margin: 0 auto; background: #000;">
-                    <div style="position: relative; padding-bottom: 177.78%; height: 0; overflow: hidden;">
-                        <iframe id="videoPlayer" 
-                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
-                                src="" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                        </iframe>
-                    </div>
-                </div>
+                <video id="videoPlayer" width="100%" height="auto" controls>
+                    <source src="assets/videos/fer_video.MOV" type="video/quicktime">
+                    <source src="assets/videos/fer_video.MOV" type="video/mp4">
+                    Seu navegador não suporta vídeos HTML5.
+                </video>
                 <button class="next-button" id="nextButton" onclick="goToStage(2)">Continuar ➜</button>
             </div>
         </div>
@@ -681,37 +669,29 @@
         let currentImageIndex = 0;
 
         // ===== FUNÇÕES DE VÍDEO =====
+        // ===== FUNÇÕES DE VÍDEO =====
+        function openVideo() {
+            document.getElementById('videoModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
         function closeVideo() {
-            const videoModal = document.getElementById('videoModal');
-            const videoPlayer = document.getElementById('videoPlayer');
-            
-            videoModal.classList.remove('active');
-            // Parar o vídeo removendo o src do iframe
-            videoPlayer.src = '';
+            document.getElementById('videoModal').classList.remove('active');
+            const video = document.getElementById('videoPlayer');
+            video.pause();
+            video.currentTime = 0;
             document.body.style.overflow = 'auto';
         }
 
-        // Mostrar botão "Continuar" após abrir o vídeo (YouTube Shorts geralmente são curtos)
-        function openVideo() {
-            const videoModal = document.getElementById('videoModal');
-            const videoPlayer = document.getElementById('videoPlayer');
-            
-            // Carregar o vídeo do YouTube apenas quando o modal abrir
-            if (!videoPlayer.src) {
-                videoPlayer.src = 'https://www.youtube.com/embed/LgAycSTL4Pk?autoplay=1&rel=0&playsinline=1';
-            }
-            
-            videoModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            
-            // Mostrar botão "Continuar" após alguns segundos
+        // Mostrar botão "Continuar" quando vídeo terminar
+        const videoPlayer = document.getElementById('videoPlayer');
+        videoPlayer.addEventListener('ended', function() {
+            document.getElementById('nextButton').classList.add('show');
+            // Pequeno delay para garantir que a classe foi aplicada
             setTimeout(() => {
-                document.getElementById('nextButton').classList.add('show');
-                setTimeout(() => {
-                    document.getElementById('nextButton').style.animation = 'slideUp 0.5s ease-out';
-                }, 100);
-            }, 3000); // Mostra após 3 segundos (ajuste conforme necessário)
-        }
+                document.getElementById('nextButton').style.animation = 'slideUp 0.5s ease-out';
+            }, 100);
+        });
 
         // ===== FUNÇÕES DE NAVEGAÇÃO ENTRE ETAPAS =====
         function goToStage(stage) {
